@@ -1,3 +1,32 @@
+# Allow all web crawlers
 User-agent: *
 Allow: /
+
+# Set crawl delay for all bots
+Crawl-delay: 10
+
+# Specify sitemap location
 Sitemap: https://yesiboughtadomainforthis.com/sitemap.xml
+
+# Disallow specific paths
+User-agent: *
+Disallow: /scripts/
+Disallow: /.github/
+Disallow: /.well-known/
+
+# Specific rules for major crawlers
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 2

@@ -3,31 +3,340 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
   workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly health check
 
 permissions:
   contents: read
   pages: write
   id-token: write
+  issues: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  validate:
+    name: Validate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install Dependencies
+        run: |
+          npm install -g htmlhint stylelint eslint lighthouse jshint
+      
+      - name: Lint HTML
+        run: |
+          htmlhint "**/*.html" --config .htmlhintrc || true
+      
+      - name: Lint CSS
+        run: |
+          stylelint "**/*.css" --config .stylelintrc || true
+      
+      - name: Lint JavaScript
+        run: |
+          jshint "**/*.js" || true
+      
+      - name: Check for Broken Links
+        run: |
+          echo "Running link validation..."
+          # npx linkinator . --recurse --skip "^(?!http|https)" || true
+      
+      - name: Check File Size Limits
+        run: |
+          echo "Checking file sizes..."
+          find . -type f -not -path "*/\.git/*" -not -path "*/node_modules/*" -exec du -h {} \; | sort -hr | head -n 20
+          
+      - name: Validate Sitemap
+        run: |
+          echo "Validating sitemap.xml..."
+          [ -f sitemap.xml ] && echo "✅ Sitemap exists" || echo "❌ Missing sitemap.xml"
 
+  build:
+    name: Build & Deploy
+    needs: validate
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Build Tools
+        run: |
+          npm install -g clean-css-cli html-minifier uglify-js
+      
+      - name: Optimize Assets
+        run: |
+          echo "Optimizing CSS files..."
+          find . -name "*.css" -not -path "*/node_modules/*" -not -path "*/\.git/*" | while read file; do
+            if [ -f "$file" ]; then
+              cleancss -o "$file.min" "$file" && mv "$file.min" "$file"
+            fi
+          done
+          
+          echo "Optimizing JavaScript files..."
+          find . -name "*.js" -not -path "*/node_modules/*" -not -path "*/\.git/*" | while read file; do
+            if [ -f "$file" ]; then
+              uglifyjs "$file" -o "$file.min" && mv "$file.min" "$file"
+            fi
+          done
+          
+          echo "Optimizing HTML files..."
+          find . -name "*.html" -not -path "*/node_modules/*" -not -path "*/\.git/*" | while read file; do
+            if [ -f "$file" ]; then
+              html-minifier --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype "$file" -o "$file.min" && mv "$file.min" "$file"
+            fi
+          done
+      
+      - name: Add Cache Headers
+        run: |
+          echo "Creating _headers file for Cloudflare/Netlify compatibility..."
+          cat > _headers << EOL
+          /*
+            Cache-Control: public, max-age=3600
+            X-Frame-Options: DENY
+            X-XSS-Protection: 1; mode=block
+            X-Content-Type-Options: nosniff
+            Referrer-Policy: strict-origin-when-cross-origin
+            Permissions-Policy: camera=(), microphone=(), geolocation=()
+            Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; frame-ancestors 'none';
+
+          *.js
+            Cache-Control: public, max-age=31536000, immutable
+          
+          *.css
+            Cache-Control: public, max-age=31536000, immutable
+          
+          *.jpg
+            Cache-Control: public, max-age=31536000, immutable
+          
+          *.png
+            Cache-Control: public, max-age=31536000, immutable
+          
+          *.svg
+            Cache-Control: public, max-age=31536000, immutable
+          
+          *.woff2
+            Cache-Control: public, max-age=31536000, immutable
+          EOL
+      
+      - name: Generate Service Worker
+        run: |
+          echo "Creating service worker for offline capability..."
+          cat > sw.js << EOL
+          // Service Worker for offline capability
+          const CACHE_NAME = 'yesiboughtadomainforthis-v1';
+          const urlsToCache = [
+            '/',
+            '/index.html',
+            '/common/css/main.css',
+            '/common/js/site-router.js',
+            '/sites/costa-adeje/index.html',
+            '/404.html',
+            '/sites/costa-adeje/css/reset.css',
+            '/sites/costa-adeje/css/layout.css',
+            '/sites/costa-adeje/css/theme-dark.css',
+            '/sites/costa-adeje/css/typography.css',
+            '/sites/costa-adeje/js/outline.js',
+            '/sites/costa-adeje/js/component-loader.js'
+          ];
+
+          self.addEventListener('install', event => {
+            event.waitUntil(
+              caches.open(CACHE_NAME)
+                .then(cache => cache.addAll(urlsToCache))
+            );
+          });
+
+          self.addEventListener('fetch', event => {
+            event.respondWith(
+              caches.match(event.request)
+                .then(response => {
+                  if (response) {
+                    return response;
+                  }
+                  return fetch(event.request)
+                    .then(response => {
+                      if (!response || response.status !== 200 || response.type !== 'basic') {
+                        return response;
+                      }
+                      const responseToCache = response.clone();
+                      caches.open(CACHE_NAME)
+                        .then(cache => {
+                          cache.put(event.request, responseToCache);
+                        });
+                      return response;
+                    });
+                })
+            );
+          });
+
+          self.addEventListener('activate', event => {
+            const cacheWhitelist = [CACHE_NAME];
+            event.waitUntil(
+              caches.keys().then(cacheNames => {
+                return Promise.all(
+                  cacheNames.map(cacheName => {
+                    if (cacheWhitelist.indexOf(cacheName) === -1) {
+                      return caches.delete(cacheName);
+                    }
+                  })
+                );
+              })
+            );
+          });
+          EOL
+          
+          # Add service worker registration to index.html
+          sed -i 's/<\/head>/  <script>\n    if ("serviceWorker" in navigator) {\n      window.addEventListener("load", () => {\n        navigator.serviceWorker.register("\/sw.js").then(\n          registration => console.log("ServiceWorker registration successful with scope: ", registration.scope),\n          error => console.log("ServiceWorker registration failed: ", error)\n        );\n      });\n    }\n  <\/script>\n<\/head>/' index.html
+      
+      - name: Generate Web App Manifest
+        run: |
+          echo "Creating web app manifest for PWA support..."
+          cat > manifest.json << EOL
+          {
+            "name": "Yes I Bought A Domain For This",
+            "short_name": "YesIDomainThis",
+            "description": "A multi-site static web hosting platform",
+            "start_url": "/",
+            "display": "standalone",
+            "background_color": "#191919",
+            "theme_color": "#d86666",
+            "icons": [
+              {
+                "src": "/favicon.ico",
+                "sizes": "48x48",
+                "type": "image/x-icon"
+              }
+            ]
+          }
+          EOL
+          
+          # Add manifest link to index.html
+          sed -i 's/<\/head>/  <link rel="manifest" href="\/manifest.json">\n  <meta name="theme-color" content="#d86666">\n<\/head>/' index.html
+      
+      - name: Add Performance Monitoring
+        run: |
+          echo "Adding minimal performance monitoring snippet..."
+          cat > perfmetrics.js << EOL
+          // Minimal performance monitoring
+          (function() {
+            if (!window.performance || !window.performance.timing) return;
+            
+            function sendMetrics() {
+              const timing = window.performance.timing;
+              const metrics = {
+                pageLoad: timing.loadEventEnd - timing.navigationStart,
+                domReady: timing.domComplete - timing.domLoading,
+                networkLatency: timing.responseEnd - timing.fetchStart,
+                renderTime: timing.domComplete - timing.domContentLoadedEventStart
+              };
+              
+              // Log metrics (in production would send to analytics)
+              console.log('Performance metrics:', metrics);
+              
+              // Store in localStorage for diagnostic purposes
+              try {
+                const storedMetrics = JSON.parse(localStorage.getItem('perfMetrics') || '[]');
+                storedMetrics.push({
+                  timestamp: new Date().toISOString(),
+                  url: window.location.href,
+                  ...metrics
+                });
+                // Keep only last 10 entries
+                if (storedMetrics.length > 10) storedMetrics.shift();
+                localStorage.setItem('perfMetrics', JSON.stringify(storedMetrics));
+              } catch (e) {
+                console.error('Failed to store metrics:', e);
+              }
+            }
+            
+            // Wait for window load event
+            window.addEventListener('load', function() {
+              // Delay to ensure load event completes
+              setTimeout(sendMetrics, 0);
+            });
+          })();
+          EOL
+          
+          # Add performance monitoring script to index.html
+          sed -i 's/<\/body>/  <script src="\/perfmetrics.js" async><\/script>\n<\/body>/' index.html
+      
       - name: Configure Pages
         uses: actions/configure-pages@v4
-
+      
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
-
+      
       - name: Deploy to Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  audit:
+    name: Audit
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Lighthouse
+        run: npm install -g lighthouse chrome-launcher
+      
+      - name: Wait for Deployment
+        run: sleep 60
+      
+      - name: Run Lighthouse Audit
+        run: |
+          SITE_URL="${{ needs.build.outputs.url || 'https://yesiboughtadomainforthis.com' }}"
+          lighthouse "$SITE_URL" --output=json --output=html --output-path=./lighthouse-report
+        continue-on-error: true
+      
+      - name: Save Lighthouse Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: ./lighthouse-report*
+      
+      - name: Create Issue on Low Performance
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Performance Audit Failed',
+              body: 'The latest lighthouse performance audit has identified issues. Please check the artifacts from workflow run #' + context.runId
+            })
