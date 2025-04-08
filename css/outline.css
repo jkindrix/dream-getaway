@@ -1,0 +1,165 @@
+/* Outline styles */
+.outline-content {
+    padding: 3px 10px !important;
+    text-align: left !important;
+}
+
+.outline-content li,
+.outline-content ul {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    list-style: none;
+    overflow-wrap: anywhere;
+}
+
+.outline-content ul {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.outline-content strong {
+    font-weight: 400;
+}
+
+.outline-expander {
+    width: 1rem;
+    height: 1.42857rem;
+    position: relative;
+    display: table-cell;
+    vertical-align: middle;
+    cursor: pointer;
+    padding-left: 4px;
+}
+
+.outline-expander::before {
+    content: "";
+    position: relative;
+    font-family: Ionicons;
+    display: inline-block;
+    font-size: 8px;
+    vertical-align: middle;
+}
+
+.outline-item {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    cursor: pointer;
+}
+
+.outline-expander:hover::before {
+    content: "";
+}
+
+.outline-h1>.outline-item {
+    padding-left: 0px;
+}
+
+.outline-h2>.outline-item {
+    padding-left: 1em;
+}
+
+.outline-h3>.outline-item {
+    padding-left: 2em;
+}
+
+.outline-h4>.outline-item {
+    padding-left: 3em;
+}
+
+.outline-h5>.outline-item {
+    padding-left: 4em;
+}
+
+.outline-h6>.outline-item {
+    padding-left: 5em;
+}
+
+.outline-label {
+    cursor: pointer;
+    display: table-cell;
+    vertical-align: middle;
+    text-decoration: none;
+    color: inherit;
+}
+
+.outline-label:hover {
+    text-decoration: underline;
+}
+
+.outline-item:hover {
+    border-color: rgb(245, 245, 245);
+    background-color: var(--item-hover-bg-color);
+}
+
+.outline-item:hover {
+    margin-left: -28px;
+    margin-right: -28px;
+    border-left: 28px solid transparent;
+    border-right: 28px solid transparent;
+}
+
+.outline-item-single .outline-expander::before,
+.outline-item-single .outline-expander:hover::before {
+    display: none;
+}
+
+.outline-item-open>.outline-item>.outline-expander::before {
+    content: "";
+}
+
+.outline-children {
+    display: none;
+}
+
+.outline-item-open>.outline-children {
+    display: block;
+}
+
+.outline-item-active {
+    margin-left: -28px;
+    margin-right: -28px;
+    border-left: 28px solid transparent;
+    border-right: 28px solid transparent;
+    background-color: #424242;
+    border-color: #424242;
+}
+
+.typora-export .outline-item {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.typora-export .outline-item:hover {
+    margin-right: -8px;
+    border-right: 8px solid transparent;
+}
+
+.typora-export .outline-expander::before {
+    content: "+";
+    font-family: inherit;
+    top: -1px;
+}
+
+.typora-export .outline-expander:hover::before,
+.typora-export .outline-item-open>.outline-item>.outline-expander::before {
+    content: "−";
+}
+
+.typora-export-collapse-outline .outline-children {
+    display: none;
+}
+
+.typora-export-collapse-outline .outline-item-open>.outline-children,
+.typora-export-no-collapse-outline .outline-children {
+    display: block;
+}
+
+.typora-export-no-collapse-outline .outline-expander::before {
+    content: "" !important;
+}
+
+.typora-export-show-outline .outline-item-active>.outline-item .outline-label {
+    font-weight: 700;
+}

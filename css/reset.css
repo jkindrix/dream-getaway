@@ -1,0 +1,95 @@
+/* Reset and base styles */
+html {
+    overflow-x: initial !important;
+    font-size: 14px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --select-text-bg-color: #B5D6FC;
+    --select-text-font-color: auto;
+    --monospace: "Lucida Console", Consolas, "Courier", monospace;
+    --title-bar-height: 20px;
+}
+
+.mac-os-11 {
+    --title-bar-height: 28px;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    inset: 0px;
+    font-size: 1rem;
+    line-height: 1.42857;
+    overflow-x: hidden;
+    background: inherit;
+}
+
+*,
+::after,
+::before {
+    box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    white-space: pre-wrap;
+}
+
+iframe {
+    margin: auto;
+}
+
+a.url {
+    word-break: break-all;
+}
+
+a:active,
+a:hover {
+    outline: 0px;
+}
+
+.in-text-selection,
+::selection {
+    text-shadow: none;
+    background: var(--select-text-bg-color);
+    color: var(--select-text-font-color);
+}
+
+.hidden {
+    display: none;
+}
+
+a {
+    cursor: pointer;
+}
+
+img {
+    max-width: 100%;
+    vertical-align: middle;
+    image-orientation: from-image;
+}
+
+button,
+input,
+select,
+textarea {
+    color: inherit;
+    font: inherit;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    line-height: normal;
+    padding: 0px;
+}

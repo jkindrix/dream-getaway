@@ -1,0 +1,139 @@
+/* Typography styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    break-after: avoid-page;
+    break-inside: avoid;
+    orphans: 4;
+    position: relative;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    text-decoration: none;
+}
+
+p {
+    orphans: 4;
+    line-height: inherit;
+}
+
+h1 {
+    font-size: 2rem;
+    padding-bottom: 0.3em;
+    line-height: 1.2;
+    border-bottom: 1px solid #202020;
+}
+
+h2 {
+    font-size: 1.8rem;
+    padding-bottom: 0.3em;
+    line-height: 1.225;
+    border-bottom: 1px solid #202020;
+}
+
+h3 {
+    font-size: 1.6rem;
+    line-height: 1.43;
+}
+
+h4 {
+    font-size: 1.4rem;
+}
+
+h5 {
+    font-size: 1.2rem;
+}
+
+h6 {
+    font-size: 1rem;
+    color: #777;
+}
+
+.md-math-block,
+.md-rawblock,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+p,
+blockquote,
+ul,
+ol,
+dl,
+table {
+    margin: 0.8em 0;
+    text-align: left;
+}
+
+strong,
+b {
+    color: #f0f0f0;
+}
+
+code,
+pre,
+samp,
+tt {
+    font-family: var(--monospace);
+}
+
+blockquote {
+    border-left: 4px solid #aaaaaa80;
+    margin-left: 2px;
+    padding: 0 15px;
+    color: #aaa;
+}
+
+blockquote blockquote {
+    padding-right: 0;
+}
+
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+
+ul,
+ol {
+    padding-left: 30px;
+}
+
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+
+hr {
+    height: 2px;
+    padding: 0;
+    margin: 32px 0;
+    background-color: #212121;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+}

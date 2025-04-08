@@ -1,0 +1,112 @@
+/* Dark theme */
+:root {
+    --side-bar-bg-color: #212121;
+    --control-text-color: #aaa;
+    --active-file-bg-color: #383838;
+    --control-text-hover-color: #ddd;
+    --item-hover-bg-color: #404040;
+    --text-color: #c0c0c0;
+    --blur-text-color: #80808080;
+    --bg-color: #191919;
+    --select-text-bg-color: #663f3f !important;
+    --monospace: "IBM Plex Mono", "Fira Code", "微软雅黑", monospace !important;
+    --window-border: 1px solid #404040;
+    --rawblock-edit-panel-bd: #212121;
+    --mermaid-theme: dark;
+    --mermaid-font-family: "IBM Plex Mono", "Fira Code", "微软雅黑", monospace !important;
+    --mermaid-sequence-numbers: off;
+    --mermaid-flowchart-curve: basis;
+    --mermaid--gantt-left-padding: 100;
+    --heading-char-color: #aaa;
+    --meta-content-color: #6794bc;
+    --primary-color: #d86666;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: "IBM Plex Sans", "Microsoft YaHei", "微软雅黑", "Open Sans", "Clear Sans", "Helvetica Neue",
+        Helvetica, Arial, sans-serif;
+    color: #d0d0d0;
+    background-color: var(--bg-color);
+    line-height: 1.75;
+    scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #42424280 !important;
+}
+
+.menu-item-container a.menu-style-btn {
+    background: #424242;
+}
+
+#write a {
+    color: #d86666;
+    text-decoration: none !important;
+    border-bottom: 1px solid #d8666680;
+}
+
+mark {
+    background: rgb(255, 255, 0);
+    color: rgb(0, 0, 0);
+}
+
+/* Code mirror theming */
+.md-fences,
+code,
+tt {
+    border: 1px solid #424242;
+    background-color: #42424280;
+    border-radius: 3px;
+    padding: 2px 4px 1px 4px;
+    font-size: 0.85em;
+}
+
+.cm-s-inner .cm-keyword {
+    color: rgb(189, 97, 201);
+}
+
+.cm-s-inner .cm-atom,
+.cm-s-inner.cm-atom {
+    color: rgb(131, 115, 236);
+}
+
+.cm-s-inner .cm-number {
+    color: rgb(73, 190, 143);
+}
+
+.cm-s-inner .cm-def {
+    color: rgb(123, 123, 255);
+}
+
+.cm-s-inner .cm-variable {
+    color: rgb(199, 199, 199);
+}
+
+.cm-s-inner .cm-variable-2 {
+    color: rgb(131, 166, 201);
+}
+
+.cm-s-inner .cm-variable-3 {
+    color: rgb(153, 197, 181);
+}
+
+.cm-s-inner .cm-string {
+    color: rgb(194, 104, 104);
+}
+
+.cm-s-inner .cm-property {
+    color: rgb(199, 199, 199);
+}
+
+.cm-s-inner .cm-operator {
+    color: #b67e7e;
+}
+
+.cm-s-inner .cm-comment,
+.cm-s-inner.cm-comment {
+    color: rgb(216, 158, 99);
+}
