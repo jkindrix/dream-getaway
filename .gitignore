@@ -29,6 +29,7 @@ package-lock.json
 .eslintcache
 .yarn-integrity
 .node_repl_history
+package.json
 
 # Logs and temp files
 logs/
@@ -42,6 +43,7 @@ pids
 *.pid.lock
 .temp
 .cache
+monitoring.log
 
 # Environment variables
 .env
@@ -53,6 +55,7 @@ pids
 # Testing
 coverage/
 .nyc_output/
+lighthouse-report*
 
 # Build and dist folders
 dist/
@@ -68,3 +71,9 @@ out/
 
 # Local configuration
 config.local.json
+
+# Generated files
+_headers
+perfmetrics.js
+sw.js
+manifest.json
