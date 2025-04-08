@@ -1,4 +1,4 @@
-# Dream Getaway
+# Yes I Bought A Domain For This
 
 A modular website presenting a luxury property in Costa Adeje, Tenerife.
 
@@ -6,7 +6,7 @@ A modular website presenting a luxury property in Costa Adeje, Tenerife.
 
 To enable GitHub Pages:
 
-1. Go to the repository on GitHub: [github.com/jkindrix/dream-getaway](https://github.com/jkindrix/dream-getaway)
+1. Go to the repository on GitHub: [github.com/jkindrix/yesiboughtadomainforthis](https://github.com/jkindrix/yesiboughtadomainforthis)
 2. Go to Settings → Pages
 3. Under "Build and deployment", select:
    - Source: "Deploy from a branch"
@@ -25,7 +25,7 @@ After saving, GitHub will verify your domain. You'll need to configure your doma
 
 2. Or set up a CNAME record:
    - Name: @ or www
-   - Value: jkindrix.github.io
+   - Value: jkindrix.github.io/yesiboughtadomainforthis
 
 ## Structure
 
