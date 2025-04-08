@@ -133,22 +133,48 @@ git push
 
 ## Configuring GitHub Pages via API
 
+Since GitHub CLI doesn't have native commands for GitHub Pages, we use the `gh api` command to interact with GitHub's REST API endpoints for Pages configuration.
+
+### Creating the GitHub Pages Site
+
 ```bash
 # Create the GitHub Pages site with main branch as source
 echo '{"source": {"branch": "main"}}' | gh api --method POST \
   -H "Accept: application/vnd.github+json" \
   -H "Content-Type: application/json" \
   /repos/jkindrix/yesiboughtadomainforthis/pages --input -
+```
 
+This command makes a POST request to the `/repos/{owner}/{repo}/pages` endpoint to enable GitHub Pages for the repository. The JSON payload specifies that the source branch is `main`.
+
+### Setting a Custom Domain
+
+```bash
 # Set custom domain
 echo '{"cname": "yesiboughtadomainforthis.com"}' | gh api --method PUT \
   -H "Accept: application/vnd.github+json" \
   -H "Content-Type: application/json" \
   /repos/jkindrix/yesiboughtadomainforthis/pages --input -
+```
 
+This command makes a PUT request to update the Pages configuration with your custom domain. The `cname` field specifies the domain name to use.
+
+### Checking GitHub Pages Status
+
+```bash
 # Check GitHub Pages status
 gh api /repos/jkindrix/yesiboughtadomainforthis/pages
 ```
+
+This command makes a GET request to retrieve the current GitHub Pages configuration and build status.
+
+### Understanding the API Response
+
+The response includes:
+- `status`: The current build status (e.g., "building")
+- `cname`: Your custom domain
+- `source`: The branch and path being used as the source
+- `https_enforced`: Whether HTTPS enforcement is enabled
 
 ## DNS Configuration (To Be Done With Your Domain Registrar)
 
@@ -176,6 +202,22 @@ echo '{"https_enforced": true}' | gh api --method PUT \
   -H "Accept: application/vnd.github+json" \
   -H "Content-Type: application/json" \
   /repos/jkindrix/yesiboughtadomainforthis/pages --input -
+```
+
+This command makes a PUT request to update the GitHub Pages configuration with HTTPS enforcement enabled. GitHub will first validate that it has successfully provisioned an SSL certificate for your domain before this setting can be applied.
+
+### Troubleshooting HTTPS Enforcement
+
+If you get an error like `"The certificate does not exist yet"`, it means:
+1. DNS verification is still pending
+2. GitHub hasn't yet provisioned an SSL certificate for your domain
+3. You need to wait longer (typically up to 24 hours) before retrying
+
+You can check the verification status with:
+
+```bash
+# Check GitHub Pages health
+gh api /repos/jkindrix/yesiboughtadomainforthis/pages/health
 ```
 
 ## Adding New Sites
