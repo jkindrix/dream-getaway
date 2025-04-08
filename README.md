@@ -1,48 +1,59 @@
 # Yes I Bought A Domain For This
 
-A modular website presenting a luxury property in Costa Adeje, Tenerife.
+A multi-site static web hosting platform under a single domain.
 
-## GitHub Pages Setup
+## Overview
 
-To enable GitHub Pages:
-
-1. Go to the repository on GitHub: [github.com/jkindrix/yesiboughtadomainforthis](https://github.com/jkindrix/yesiboughtadomainforthis)
-2. Go to Settings → Pages
-3. Under "Build and deployment", select:
-   - Source: "Deploy from a branch"
-   - Branch: main
-   - Folder: / (root)
-4. In the "Custom domain" section, enter: yesiboughtadomainforthis.com
-5. Click "Save"
-
-After saving, GitHub will verify your domain. You'll need to configure your domain with your registrar:
-
-1. Set up an A record pointing to GitHub Pages IPs:
-   - 185.199.108.153
-   - 185.199.109.153
-   - 185.199.110.153
-   - 185.199.111.153
-
-2. Or set up a CNAME record:
-   - Name: @ or www
-   - Value: jkindrix.github.io/yesiboughtadomainforthis
+This repository hosts multiple static websites under the yesiboughtadomainforthis.com domain. Each site is contained in its own folder within the `sites` directory, allowing for independent development and maintenance.
 
 ## Structure
 
-The site is organized with a modular approach:
+```
+yesiboughtadomainforthis/
+├── common/               # Shared resources across sites
+│   ├── css/              # Common CSS
+│   └── js/               # Common JavaScript (including router)
+│
+├── sites/                # Individual websites
+│   ├── costa-adeje/      # Costa Adeje Property site
+│   │   ├── components/   # HTML components
+│   │   ├── css/          # Site-specific styles
+│   │   ├── js/           # Site-specific scripts
+│   │   └── index.html    # Entry point
+│   │
+│   └── [site-name]/      # Template for additional sites
+│
+├── index.html            # Main landing page
+├── CNAME                 # Domain configuration
+└── README.md             # This file
+```
 
-- **CSS**: Separate stylesheets for different concerns
-- **JS**: Modular JavaScript files
-- **Components**: HTML sections loaded dynamically
+## Adding a New Site
 
-## Development
+1. Create a new folder in the `sites` directory
+2. Add your site files (HTML, CSS, JS, etc.)
+3. Update the router configuration in `common/js/site-router.js`
+4. Add a card to the main landing page in `index.html`
 
-1. Clone the repository
-2. Open `index.html` in a browser
-3. Make changes to the relevant component files
+## Available Sites
 
-## Deployment
+- [Costa Adeje Property](https://yesiboughtadomainforthis.com/costa-adeje) - A luxury property showcase
 
-The site is automatically deployed to GitHub Pages when changes are pushed to the main branch.
+## Domain Setup
 
-Visit the live site: [yesiboughtadomainforthis.com](https://yesiboughtadomainforthis.com)
+The repository is configured for GitHub Pages with a custom domain:
+
+1. DNS Configuration:
+   - Set up A records pointing to GitHub Pages IPs:
+     - 185.199.108.153
+     - 185.199.109.153
+     - 185.199.110.153
+     - 185.199.111.153
+   - Or set up a CNAME record:
+     - Name: @ or www
+     - Value: jkindrix.github.io
+
+2. GitHub Pages Configuration:
+   - Repository Settings → Pages
+   - Custom domain: yesiboughtadomainforthis.com
+   - Source: Deploy from a branch (main)

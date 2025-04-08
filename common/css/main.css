@@ -1,0 +1,126 @@
+/* Main styles for the multi-site root page */
+:root {
+    --bg-color: #191919;
+    --text-color: #d0d0d0;
+    --accent-color: #d86666;
+    --card-bg: #282828;
+    --hover-color: #3a3a3a;
+}
+
+body {
+    font-family: "IBM Plex Sans", "Open Sans", "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.8;
+}
+
+.sites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.site-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.site-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    background-color: var(--hover-color);
+}
+
+.site-image {
+    width: 100%;
+    height: 180px;
+    background-color: #333;
+    background-size: cover;
+    background-position: center;
+}
+
+.site-content {
+    padding: 1.5rem;
+}
+
+.site-title {
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem 0;
+    color: var(--accent-color);
+}
+
+.site-description {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.add-site {
+    border: 2px dashed #444;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    text-align: center;
+}
+
+.add-site i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--accent-color);
+}
+
+footer {
+    margin-top: 4rem;
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid #333;
+}
+
+footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .sites-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .container {
+        padding: 1rem;
+    }
+}

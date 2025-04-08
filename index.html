@@ -1,33 +1,45 @@
-<!doctype html>
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width initial-scale=1'>
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/typography.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/theme-dark.css">
-    <link rel="stylesheet" href="css/outline.css">
-    <link rel="stylesheet" href="css/loading.css">
-    <title>Yes I Bought A Domain For This | Costa Adeje Property</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>yesiboughtadomainforthis.com | Multi-Site Platform</title>
+    <link rel="stylesheet" href="common/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/3e5f9cbfad.js" crossorigin="anonymous"></script>
+    <script src="common/js/site-router.js"></script>
 </head>
+<body>
+    <div class="container">
+        <header>
+            <h1>yesiboughtadomainforthis.com</h1>
+            <p class="subtitle">A collection of static web experiences</p>
+        </header>
 
-<body class='typora-export os-windows typora-export-show-outline typora-export-no-collapse-outline'>
-    <div class='typora-export-content'>
-        <div class="typora-export-sidebar">
-            <div class="outline-content" id="outline-content">
-                <!-- Outline content will be loaded dynamically -->
+        <main>
+            <div class="sites-grid">
+                <!-- Costa Adeje Property -->
+                <a href="/costa-adeje" class="site-card">
+                    <div class="site-image" style="background-image: url('https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="site-content">
+                        <h2 class="site-title">Costa Adeje Property</h2>
+                        <p class="site-description">Dream getaway in Tenerife's stunning Costa Adeje - a luxury oceanfront penthouse.</p>
+                    </div>
+                </a>
+
+                <!-- Template for adding a new site -->
+                <div class="site-card add-site">
+                    <i class="fas fa-plus-circle"></i>
+                    <h2 class="site-title">Add New Site</h2>
+                    <p class="site-description">Create a new folder in /sites and update the router config.</p>
+                </div>
             </div>
-        </div>
-        <div id='write' class=''>
-            <!-- Content will be loaded dynamically -->
-            <div class="loading-indicator">Loading content...</div>
-        </div>
+        </main>
+
+        <footer>
+            <p>Created with <i class="fas fa-heart" style="color: #d86666;"></i> by <a href="https://github.com/jkindrix">Justin Kindrix</a></p>
+            <p><a href="https://github.com/jkindrix/yesiboughtadomainforthis"><i class="fab fa-github"></i> View on GitHub</a></p>
+        </footer>
     </div>
-
-    <script src="js/outline.js"></script>
-    <script src="js/component-loader.js"></script>
 </body>
-
 </html>

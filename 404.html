@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | yesiboughtadomainforthis.com</title>
+    <link rel="stylesheet" href="common/css/main.css">
+    <style>
+        .error-container {
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+        
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            margin: 0;
+            line-height: 1;
+            color: var(--accent-color);
+        }
+        
+        .error-message {
+            font-size: 2rem;
+            margin: 1rem 0 3rem;
+        }
+        
+        .home-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .home-button:hover {
+            background-color: #c45555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-container">
+            <h1 class="error-code">404</h1>
+            <p class="error-message">Page Not Found</p>
+            <p>We can't seem to find the page you're looking for.</p>
+            <a href="/" class="home-button">Go Home</a>
+        </div>
+    </div>
+    
+    <script>
+        // Handle 404s for site paths by trying to redirect to the right place
+        (function() {
+            const path = window.location.pathname;
+            const pathParts = path.split('/').filter(Boolean);
+            
+            if (pathParts.length >= 1) {
+                const potentialSite = pathParts[0];
+                // Check if this might be a site path with a missing /index.html
+                fetch(`/sites/${potentialSite}/index.html`, { method: 'HEAD' })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = `/sites/${potentialSite}/index.html`;
+                        }
+                    })
+                    .catch(() => {
+                        // Do nothing, stay on 404 page
+                    });
+            }
+        })();
+    </script>
+</body>
+</html>
