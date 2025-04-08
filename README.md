@@ -63,7 +63,7 @@ For detailed setup instructions, see [SETUP.md](SETUP.md).
 
 ## Security
 
-Please report any security issues to jkindrix@gmail.com.
+Please report any security issues via GitHub issues on this repository.
 
 ## License
 

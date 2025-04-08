@@ -1,36 +1,11 @@
 # DNS and GitHub Pages Setup Scripts
 
-This directory contains scripts to automate DNS configuration for GitHub Pages and monitor its status.
+This directory contains scripts to verify DNS configuration for GitHub Pages and enable HTTPS.
 
 ## Scripts Overview
 
-- **setup-namecheap-dns.sh**: Configures DNS records for GitHub Pages on Namecheap domains
 - **check-dns-status.sh**: Verifies that DNS records are correctly configured and propagated
 - **enable-https.sh**: Enables HTTPS enforcement on GitHub Pages once the domain is verified
-
-## Setup Namecheap DNS
-
-This script uses Namecheap's API to configure the required DNS records for GitHub Pages:
-
-```bash
-# Test mode (sandbox)
-./setup-namecheap-dns.sh
-
-# Production mode (real changes)
-./setup-namecheap-dns.sh --production
-```
-
-**Before running**: Edit the script and replace the configuration variables at the top:
-
-```bash
-API_USER="YOUR_NAMECHEAP_USERNAME"    # Your Namecheap username
-API_KEY="YOUR_API_KEY"                # API key from Namecheap account
-USERNAME="YOUR_NAMECHEAP_USERNAME"    # Usually same as API_USER
-CLIENT_IP="YOUR_WHITELISTED_IP"       # Your IP address whitelisted in Namecheap
-DOMAIN="yesiboughtadomainforthis"     # Your domain name without extension
-TLD="com"                             # Domain extension
-GITHUB_USER="jkindrix"                # Your GitHub username
-```
 
 ## Check DNS Status
 
