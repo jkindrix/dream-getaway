@@ -13,9 +13,24 @@ Since API access is restricted, follow these steps to manually configure your Na
 1. Once on the domain management page, click the "Advanced DNS" tab
 2. Look for the "Host Records" section where you'll add your records
 
-## Step 3: Add A Records for GitHub Pages
+## Step 3: Remove Existing URL Redirect and Modify TXT Records
 
-Add the following four A records:
+Before adding new records, you need to remove or modify some existing records:
+
+1. **URL Redirect Record**: 
+   - Find and delete the URL Redirect Record for `@` pointing to `http://www.yesiboughtadinforthis.com/`
+   - This redirect must be removed as it conflicts with GitHub Pages hosting
+
+2. **TXT Record for SPF**:
+   - Locate the TXT record with value `v=spf1 include:spf.efwd.registrar-servers.com ~all`
+   - Keep this record only if you're using Namecheap's email forwarding service
+   - Otherwise, you can safely remove it
+
+> **Important**: The URL Redirect Record conflicts with GitHub Pages hosting and must be removed for your site to work properly.
+
+## Step 4: Add A Records for GitHub Pages
+
+After removing the URL redirect, add the following four A records:
 
 | Type | Host | Value | TTL |
 |------|------|-------|-----|
@@ -26,7 +41,7 @@ Add the following four A records:
 
 The `@` symbol in the "Host" field represents the root domain.
 
-## Step 4: Add CNAME Record for www Subdomain
+## Step 5: Add CNAME Record for www Subdomain
 
 Add a CNAME record for the www subdomain:
 
@@ -36,7 +51,7 @@ Add a CNAME record for the www subdomain:
 
 Replace `jkindrix` with your GitHub username.
 
-## Step 5: (Optional) Add AAAA Records for IPv6
+## Step 6: (Optional) Add AAAA Records for IPv6
 
 For IPv6 support, add these four AAAA records:
 
@@ -47,16 +62,16 @@ For IPv6 support, add these four AAAA records:
 | AAAA Record | @ | 2606:50c0:8002::153 | 30 min |
 | AAAA Record | @ | 2606:50c0:8003::153 | 30 min |
 
-## Step 6: Save Changes
+## Step 7: Save Changes
 
 1. After adding all records, scroll down and click "Save Changes"
 2. You'll see a confirmation message if everything was saved correctly
 
-## Step 7: Wait for DNS Propagation
+## Step 8: Wait for DNS Propagation
 
 DNS changes typically take 30 minutes to 48 hours to propagate across the internet. Be patient during this time.
 
-## Step 8: Verify DNS Configuration
+## Step 9: Verify DNS Configuration
 
 Use our script to check if DNS is properly configured:
 
@@ -66,7 +81,7 @@ Use our script to check if DNS is properly configured:
 
 Or use an online tool like [dnschecker.org](https://dnschecker.org/) to verify propagation.
 
-## Step 9: Enable HTTPS in GitHub Repository
+## Step 10: Enable HTTPS in GitHub Repository
 
 Once DNS propagation is complete:
 
@@ -77,13 +92,21 @@ Once DNS propagation is complete:
 
 If the "Enforce HTTPS" checkbox is grayed out, it means GitHub is still provisioning your SSL certificate. This can take up to 24 hours after DNS verification.
 
-## Step 10: Test Your Site
+## Step 11: Test Your Site
 
 After everything is set up, visit your site at:
 - `https://yesiboughtadomainforthis.com`
 - `https://www.yesiboughtadomainforthis.com`
 
 Both should load your GitHub Pages site securely with HTTPS.
+
+## Understanding Existing Records
+
+### URL Redirect Record
+The URL Redirect Record you currently have (`@` pointing to `http://www.yesiboughtadinforthis.com/`) is a Namecheap feature that redirects your root domain to the www version. For GitHub Pages, we need the root domain to directly resolve to GitHub's servers instead of redirecting.
+
+### SPF TXT Record
+The TXT record (`v=spf1 include:spf.efwd.registrar-servers.com ~all`) is an SPF (Sender Policy Framework) record used for email authentication. This record specifically relates to Namecheap's email forwarding service. If you're using Namecheap's email forwarding, keep this record. Otherwise, it can be safely removed.
 
 ## Troubleshooting
 
